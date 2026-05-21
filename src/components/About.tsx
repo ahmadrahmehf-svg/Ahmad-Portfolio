@@ -71,7 +71,7 @@ export default function About() {
                     style={{ transformStyle: 'preserve-3d' }}
                   >
                     <img
-                      src="/images/ahmad.jpeg"
+                      src="images/ahmad.jpeg"
                       alt="Ahmad Rahmeh"
                       className="w-full h-full object-cover"
                     />

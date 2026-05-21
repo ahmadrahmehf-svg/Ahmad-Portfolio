@@ -124,7 +124,7 @@ export default function Hero() {
             <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 p-1.5 mx-auto shadow-2xl shadow-amber-500/30">
               <div className="w-full h-full rounded-full overflow-hidden bg-slate-800">
                 <img
-                  src="/images/ahmad.jpeg"
+                  src="images/ahmad.jpeg"
                   alt="Ahmad Rahmeh"
                   className="w-full h-full object-cover"
                 />
