@@ -11,7 +11,6 @@ import {
   Users,
   DollarSign,
   MessageSquare,
-  Lightbulb,
 } from 'lucide-react';
 import TiltCard from './TiltCard';
 
@@ -32,11 +31,27 @@ export default function Experience() {
 
   const experiences = [
     {
-      title: 'Project / Technical Management Role',
+      title: 'Project Designer',
       company: 'Future Energy Project Development Co.',
       location: 'Amman, Jordan',
       period: 'June 2014 – June 2017',
       color: 'from-amber-500 to-orange-500',
+      icon: Briefcase,
+      responsibilities: [
+        { icon: FileText, text: 'Prepared project drawings, layouts, and design documentation' },
+        { icon: Settings, text: 'Supported technical design work for energy and infrastructure projects' },
+        { icon: ClipboardList, text: 'Developed design concepts based on project requirements and site needs' },
+        { icon: Users, text: 'Collaborated with engineers, project teams, and stakeholders during design phases' },
+        { icon: MessageSquare, text: 'Coordinated revisions and technical feedback to improve project deliverables' },
+        { icon: DollarSign, text: 'Assisted with quantity estimation and design-related cost considerations' },
+      ],
+    },
+    {
+      title: 'Project / Technical Management Role',
+      company: 'Future Energy Project Development Co.',
+      location: 'Amman, Jordan',
+      period: '2018 – Present',
+      color: 'from-blue-500 to-cyan-500',
       icon: Briefcase,
       responsibilities: [
         { icon: ClipboardList, text: 'Managed project coordination and execution from planning to delivery' },
@@ -45,21 +60,6 @@ export default function Experience() {
         { icon: FileText, text: 'Supported project planning, scheduling, and progress reporting' },
         { icon: Settings, text: 'Oversaw operational and technical activities on-site' },
         { icon: MessageSquare, text: 'Facilitated communication with clients, suppliers, and partners' },
-      ],
-    },
-    {
-      title: 'Technical Specialist',
-      company: 'New Village of Energy (NVEco)',
-      location: 'Amman, Jordan',
-      period: 'October 2017 – October 2018',
-      color: 'from-blue-500 to-cyan-500',
-      icon: Lightbulb,
-      responsibilities: [
-        { icon: Lightbulb, text: 'Worked on renewable energy and solar power system projects' },
-        { icon: Settings, text: 'Provided technical field supervision and hands-on support' },
-        { icon: FileText, text: 'Assisted with electrical and solar panel installations' },
-        { icon: ClipboardList, text: 'Performed troubleshooting, testing, and preventive maintenance' },
-        { icon: FileText, text: 'Prepared comprehensive technical documentation and reports' },
       ],
     },
   ];
