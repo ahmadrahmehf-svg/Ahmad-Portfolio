@@ -14,10 +14,12 @@ import {
   Lightbulb,
 } from 'lucide-react';
 import TiltCard from './TiltCard';
+import usePortfolioLanguage from './usePortfolioLanguage';
 
 export default function Experience() {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const { content, isArabic } = usePortfolioLanguage();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -30,55 +32,13 @@ export default function Experience() {
     return () => observer.disconnect();
   }, []);
 
-  const experiences = [
-    {
-      title: 'Project Designer',
-      company: 'Future Energy Project Development Co.',
-      location: 'Amman, Jordan',
-      period: 'June 2014 – June 2017',
-      color: 'from-amber-500 to-orange-500',
-      icon: Briefcase,
-      responsibilities: [
-        { icon: FileText, text: 'Prepared project drawings, layouts, and design documentation' },
-        { icon: Settings, text: 'Supported technical design work for energy and infrastructure projects' },
-        { icon: ClipboardList, text: 'Developed design concepts based on project requirements and site needs' },
-        { icon: Users, text: 'Collaborated with engineers, project teams, and stakeholders during design phases' },
-        { icon: MessageSquare, text: 'Coordinated revisions and technical feedback to improve project deliverables' },
-        { icon: DollarSign, text: 'Assisted with quantity estimation and design-related cost considerations' },
-      ],
-    },
-    {
-      title: 'PV Solar Technician',
-      company: 'New Village of Energy (NVEco)',
-      location: 'Amman, Jordan',
-      period: 'October 2017 – October 2018',
-      color: 'from-emerald-500 to-cyan-500',
-      icon: Lightbulb,
-      responsibilities: [
-        { icon: Lightbulb, text: 'Worked on PV solar energy systems and renewable energy projects' },
-        { icon: Settings, text: 'Provided installation support, field supervision, and technical assistance' },
-        { icon: FileText, text: 'Assisted with solar panel system setup, testing, and commissioning' },
-        { icon: ClipboardList, text: 'Performed troubleshooting, inspections, and preventive maintenance tasks' },
-        { icon: Users, text: 'Coordinated with site teams to ensure safe and efficient execution of work' },
-        { icon: MessageSquare, text: 'Prepared technical notes and reported field progress to supervisors' },
-      ],
-    },
-    {
-      title: 'Project / Technical Management Role',
-      company: 'Future Energy Project Development Co.',
-      location: 'Amman, Jordan',
-      period: '2018 – Present',
-      color: 'from-blue-500 to-cyan-500',
-      icon: Briefcase,
-      responsibilities: [
-        { icon: ClipboardList, text: 'Managed project coordination and execution from planning to delivery' },
-        { icon: DollarSign, text: 'Assisted in budgeting, cost control, and financial tracking' },
-        { icon: Users, text: 'Coordinated between technical teams and management stakeholders' },
-        { icon: FileText, text: 'Supported project planning, scheduling, and progress reporting' },
-        { icon: Settings, text: 'Oversaw operational and technical activities on-site' },
-        { icon: MessageSquare, text: 'Facilitated communication with clients, suppliers, and partners' },
-      ],
-    },
+  const experiences = content.experience.items;
+  const experienceIcons = [Briefcase, Lightbulb, Briefcase];
+  const experienceColors = ['from-amber-500 to-orange-500', 'from-emerald-500 to-cyan-500', 'from-blue-500 to-cyan-500'];
+  const responsibilityIcons = [
+    [FileText, Settings, ClipboardList, Users, MessageSquare, DollarSign],
+    [Lightbulb, Settings, FileText, ClipboardList, Users, MessageSquare],
+    [ClipboardList, DollarSign, Users, FileText, Settings, MessageSquare],
   ];
 
   return (
@@ -93,10 +53,10 @@ export default function Experience() {
           style={{ transformStyle: 'preserve-3d' }}
         >
           <span className="text-amber-600 font-semibold text-sm uppercase tracking-widest">
-            Career Journey
+            {content.experience.eyebrow}
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-3">
-            Professional Experience
+            {content.experience.title}
           </h2>
           <div className="w-16 h-1 bg-gradient-to-r from-amber-500 to-orange-500 mx-auto mt-4 rounded-full" />
         </motion.div>
@@ -113,18 +73,28 @@ export default function Experience() {
               style={{ transformStyle: 'preserve-3d' }}
             >
               {/* Timeline line */}
-              <div className="hidden sm:flex absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-400 to-transparent" />
+              <div
+                className={`hidden sm:flex absolute top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-400 to-transparent ${
+                  isArabic ? 'right-8' : 'left-8'
+                }`}
+              />
 
               <div className="flex gap-6">
                 {/* Timeline dot */}
                 <div className="hidden sm:flex relative z-10">
+                  {(() => {
+                    const Icon = experienceIcons[index];
+
+                    return (
                   <motion.div
-                    className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${exp.color} flex items-center justify-center shadow-lg`}
+                    className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${experienceColors[index]} flex items-center justify-center shadow-lg`}
                     whileHover={{ scale: 1.1, rotateY: 15 }}
                     style={{ transformStyle: 'preserve-3d' }}
                   >
-                    <exp.icon size={28} className="text-white" />
+                    <Icon size={28} className="text-white" />
                   </motion.div>
+                    );
+                  })()}
                 </div>
 
                 {/* Content Card */}
@@ -162,9 +132,12 @@ export default function Experience() {
                               style={{ transformStyle: 'preserve-3d' }}
                             >
                               <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <ChevronRight size={14} className="text-amber-500" />
+                                {(() => {
+                                  const Icon = responsibilityIcons[index][i] ?? ChevronRight;
+                                  return <Icon size={14} className="text-amber-500" />;
+                                })()}
                               </div>
-                              <p className="text-slate-600 text-sm leading-relaxed">{resp.text}</p>
+                              <p className="text-slate-600 text-sm leading-relaxed">{resp}</p>
                             </motion.div>
                           ))}
                         </div>

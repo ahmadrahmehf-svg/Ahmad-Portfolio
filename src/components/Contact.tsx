@@ -9,12 +9,16 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import TiltCard from './TiltCard';
+import usePortfolioLanguage from './usePortfolioLanguage';
 
 export default function Contact() {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const { content, isArabic } = usePortfolioLanguage();
+  const contact = content.contact;
+  const contactIcons = [Phone, Mail, MapPin, Clock];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -48,15 +52,14 @@ export default function Contact() {
           style={{ transformStyle: 'preserve-3d' }}
         >
           <span className="text-amber-400 font-semibold text-sm uppercase tracking-widest">
-            Let's Connect
+            {contact.eyebrow}
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-white mt-3">
-            Get In Touch
+            {contact.title}
           </h2>
           <div className="w-16 h-1 bg-gradient-to-r from-amber-500 to-orange-500 mx-auto mt-4 rounded-full" />
           <p className="text-slate-400 mt-6 max-w-xl mx-auto">
-            Interested in working together? Feel free to reach out. I'm always open to discussing
-            new opportunities and projects.
+            {contact.intro}
           </p>
         </motion.div>
 
@@ -64,61 +67,40 @@ export default function Contact() {
           {/* Contact Info */}
           <motion.div
             className="lg:col-span-2"
-            initial={{ opacity: 0, x: -50, rotateY: 15 }}
+            initial={{ opacity: 0, x: isArabic ? 50 : -50, rotateY: isArabic ? -15 : 15 }}
             animate={visible ? { opacity: 1, x: 0, rotateY: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
             style={{ transformStyle: 'preserve-3d' }}
           >
             <div className="space-y-6">
-              {[
-                {
-                  icon: Phone,
-                  label: 'Phone',
-                  value: '+962797536891',
-                  href: 'tel:+962797536891',
-                },
-                {
-                  icon: Mail,
-                  label: 'Email',
-                  value: 'ahmedrahmeh@yahoo.com',
-                  href: 'mailto:ahmedrahmeh@yahoo.com',
-                },
-                {
-                  icon: MapPin,
-                  label: 'Location',
-                  value: 'Amman, Jordan',
-                  href: '#',
-                },
-                {
-                  icon: Clock,
-                  label: 'Availability',
-                  value: 'Open to opportunities',
-                  href: '#',
-                },
-              ].map((item, i) => (
-                <motion.a
-                  key={i}
-                  href={item.href}
-                  className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-amber-500/30 transition-all group"
-                  whileHover={{ scale: 1.03, translateZ: '15px' }}
-                  style={{ transformStyle: 'preserve-3d' }}
-                >
-                  <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500/30 transition-colors">
-                    <item.icon size={20} className="text-amber-400" />
-                  </div>
-                  <div>
-                    <p className="text-slate-400 text-xs uppercase tracking-wider font-medium">
-                      {item.label}
-                    </p>
-                    <p className="text-white font-semibold text-sm mt-0.5">{item.value}</p>
-                  </div>
-                </motion.a>
-              ))}
+              {contact.info.map((item, i) => {
+                const Icon = contactIcons[i];
+
+                return (
+                  <motion.a
+                    key={i}
+                    href={item.href}
+                    className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-amber-500/30 transition-all group"
+                    whileHover={{ scale: 1.03, translateZ: '15px' }}
+                    style={{ transformStyle: 'preserve-3d' }}
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500/30 transition-colors">
+                      <Icon size={20} className="text-amber-400" />
+                    </div>
+                    <div>
+                      <p className="text-slate-400 text-xs uppercase tracking-wider font-medium">
+                        {item.label}
+                      </p>
+                      <p className="text-white font-semibold text-sm mt-0.5">{item.value}</p>
+                    </div>
+                  </motion.a>
+                );
+              })}
 
               {/* Social Links */}
               <div className="pt-4">
                 <p className="text-slate-400 text-xs uppercase tracking-wider font-medium mb-3">
-                  Connect With Me
+                  {contact.socialTitle}
                 </p>
                 <div className="flex gap-3">
                   <motion.a
@@ -145,7 +127,7 @@ export default function Contact() {
           {/* Contact Form */}
           <motion.div
             className="lg:col-span-3"
-            initial={{ opacity: 0, x: 50, rotateY: -15 }}
+            initial={{ opacity: 0, x: isArabic ? -50 : 50, rotateY: isArabic ? 15 : -15 }}
             animate={visible ? { opacity: 1, x: 0, rotateY: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2 }}
             style={{ transformStyle: 'preserve-3d' }}
@@ -161,8 +143,8 @@ export default function Contact() {
                   >
                     <CheckCircle size={36} className="text-green-400" />
                   </motion.div>
-                  <h3 className="text-2xl font-bold text-white mb-3">Message Sent!</h3>
-                  <p className="text-slate-400">Thank you for reaching out. I'll get back to you shortly.</p>
+                  <h3 className="text-2xl font-bold text-white mb-3">{contact.successTitle}</h3>
+                  <p className="text-slate-400">{contact.successDescription}</p>
                 </div>
               ) : (
                 <form
@@ -172,40 +154,40 @@ export default function Contact() {
                   <div className="space-y-5">
                     <div>
                       <label className="text-slate-300 text-sm font-medium mb-2 block">
-                        Your Name
+                        {contact.form.nameLabel}
                       </label>
                       <input
                         type="text"
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="John Doe"
+                        placeholder={contact.form.namePlaceholder}
                         className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all text-sm"
                       />
                     </div>
                     <div>
                       <label className="text-slate-300 text-sm font-medium mb-2 block">
-                        Email Address
+                        {contact.form.emailLabel}
                       </label>
                       <input
                         type="email"
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="john@example.com"
+                        placeholder={contact.form.emailPlaceholder}
                         className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all text-sm"
                       />
                     </div>
                     <div>
                       <label className="text-slate-300 text-sm font-medium mb-2 block">
-                        Message
+                        {contact.form.messageLabel}
                       </label>
                       <textarea
                         required
                         rows={5}
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        placeholder="Tell me about your project or opportunity..."
+                        placeholder={contact.form.messagePlaceholder}
                         className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all resize-none text-sm"
                       />
                     </div>
@@ -217,7 +199,7 @@ export default function Contact() {
                       style={{ transformStyle: 'preserve-3d' }}
                     >
                       <Send size={18} />
-                      Send Message
+                      {contact.form.submit}
                     </motion.button>
                   </div>
                 </form>

@@ -5,11 +5,17 @@ import {
   Mail,
   MapPin,
   ChevronDown,
+  Download,
 } from 'lucide-react';
+import usePortfolioLanguage from './usePortfolioLanguage';
+import { downloadPortfolioPdf } from './downloadPortfolioPdf';
 
 export default function Hero() {
   const [visible, setVisible] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isDownloading, setIsDownloading] = useState(false);
+  const { content, isArabic, language } = usePortfolioLanguage();
+  const hero = content.hero;
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
@@ -26,6 +32,17 @@ export default function Hero() {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  const handleDownloadPdf = async () => {
+    if (isDownloading) return;
+
+    try {
+      setIsDownloading(true);
+      await downloadPortfolioPdf(language === 'ar' ? 'ahmad-rahmeh-portfolio-ar.pdf' : 'ahmad-rahmeh-portfolio-en.pdf');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <section
@@ -125,19 +142,21 @@ export default function Hero() {
               <div className="w-full h-full rounded-full overflow-hidden bg-slate-800">
                 <img
                   src="images/ahmad.jpeg"
-                  alt="Ahmad Rahmeh"
+                  alt={hero.photoAlt}
                   className="w-full h-full object-cover"
                 />
               </div>
             </div>
             {/* 3D floating badge */}
             <motion.div
-              className="absolute -bottom-2 -right-2 sm:-bottom-1 sm:-right-1 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-900 text-xs font-bold px-3 py-1.5 rounded-full shadow-lg"
+              className={`absolute -bottom-2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-900 text-xs font-bold px-3 py-1.5 rounded-full shadow-lg ${
+                isArabic ? '-left-2 sm:-left-1' : '-right-2 sm:-right-1'
+              }`}
               animate={{ y: [0, -5, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
               style={{ transformStyle: 'preserve-3d', translateZ: '30px' }}
             >
-              Available
+              {hero.available}
             </motion.div>
           </div>
         </motion.div>
@@ -153,9 +172,9 @@ export default function Hero() {
           animate={{ opacity: 1, rotateX: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-          Ahmad{' '}
+          {hero.firstName}{' '}
           <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 bg-clip-text text-transparent">
-            Rahmeh
+            {hero.lastName}
           </span>
         </motion.h1>
 
@@ -168,7 +187,7 @@ export default function Hero() {
         >
           <div className="h-px w-8 bg-amber-500/50" />
           <p className="text-lg sm:text-xl text-slate-300 font-medium tracking-wide">
-            Project & Technical Management Professional
+            {hero.title}
           </p>
           <div className="h-px w-8 bg-amber-500/50" />
         </motion.div>
@@ -180,8 +199,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
         >
-          Bridging technical expertise in solar energy systems with strong project management,
-          budget control, and team coordination skills.
+          {hero.tagline}
         </motion.p>
 
         {/* Contact Quick Links */}
@@ -191,23 +209,25 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.9 }}
         >
-          {[
-            { icon: Phone, text: '+962797536891', href: 'tel:+962797536891' },
-            { icon: Mail, text: 'ahmedrahmeh@yahoo.com', href: 'mailto:ahmedrahmeh@yahoo.com' },
-            { icon: MapPin, text: 'Amman, Jordan', href: '#' },
-          ].map((item, i) => (
+          {[Phone, Mail, MapPin].map((Icon, i) => {
+            const item = hero.quickLinks[i];
+
+            return (
             <motion.a
               key={i}
               href={item.href}
+              aria-label={item.label}
+              title={item.label}
               className="flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full text-slate-300 hover:text-amber-400 hover:border-amber-500/30 hover:bg-white/10 transition-all"
               whileHover={{ scale: 1.05, translateZ: '20px' }}
               whileTap={{ scale: 0.95 }}
               style={{ transformStyle: 'preserve-3d' }}
             >
-              <item.icon size={16} />
+              <Icon size={16} />
               <span className="text-sm">{item.text}</span>
             </motion.a>
-          ))}
+            );
+          })}
         </motion.div>
 
         {/* CTA Buttons */}
@@ -224,7 +244,7 @@ export default function Hero() {
             whileTap={{ scale: 0.95 }}
             style={{ transformStyle: 'preserve-3d' }}
           >
-            Get In Touch
+            {hero.primaryCta}
           </motion.a>
           <motion.a
             href="#experience"
@@ -233,9 +253,21 @@ export default function Hero() {
             whileTap={{ scale: 0.95 }}
             style={{ transformStyle: 'preserve-3d' }}
           >
-            View Experience
+            {hero.secondaryCta}
             <ChevronDown size={16} />
           </motion.a>
+          <motion.button
+            type="button"
+            onClick={handleDownloadPdf}
+            disabled={isDownloading}
+            className="px-8 py-3.5 bg-white/5 border border-white/15 text-white font-semibold rounded-xl flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            whileHover={{ scale: isDownloading ? 1 : 1.05, translateZ: '30px', backgroundColor: 'rgba(255,255,255,0.1)' }}
+            whileTap={{ scale: isDownloading ? 1 : 0.95 }}
+            style={{ transformStyle: 'preserve-3d' }}
+          >
+            <Download size={16} />
+            {isDownloading ? hero.downloadingCta : hero.downloadCta}
+          </motion.button>
         </motion.div>
 
         {/* Scroll indicator */}

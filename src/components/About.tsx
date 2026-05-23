@@ -11,10 +11,13 @@ import {
   Wrench,
 } from 'lucide-react';
 import TiltCard from './TiltCard';
+import usePortfolioLanguage from './usePortfolioLanguage';
 
 export default function About() {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const { content } = usePortfolioLanguage();
+  const about = content.about;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,12 +30,8 @@ export default function About() {
     return () => observer.disconnect();
   }, []);
 
-  const highlights = [
-    { icon: Briefcase, label: '5+ Years Experience', value: 'Project Management' },
-    { icon: Zap, label: 'Solar & Energy', value: 'Technical Expertise' },
-    { icon: Users, label: 'Team Leadership', value: 'Coordination Skills' },
-    { icon: TrendingUp, label: 'Budget Control', value: 'Financial Oversight' },
-  ];
+  const highlightIcons = [Briefcase, Zap, Users, TrendingUp];
+  const strengthIcons = [Target, FileText, Wrench, Users, TrendingUp, Zap];
 
   return (
     <section id="about" className="py-20 sm:py-28 bg-slate-50" style={{ perspective: '1200px' }}>
@@ -46,10 +45,10 @@ export default function About() {
           style={{ transformStyle: 'preserve-3d' }}
         >
           <span className="text-amber-600 font-semibold text-sm uppercase tracking-widest">
-            Professional Profile
+            {about.eyebrow}
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-slate-900 mt-3">
-            About Me
+            {about.title}
           </h2>
           <div className="w-16 h-1 bg-gradient-to-r from-amber-500 to-orange-500 mx-auto mt-4 rounded-full" />
         </motion.div>
@@ -78,16 +77,10 @@ export default function About() {
                   </motion.div>
                   <div className="flex-1">
                     <p className="text-slate-600 leading-relaxed text-base mb-4">
-                      A dedicated <strong className="text-slate-800">Project & Technical Management
-                      Professional</strong> with extensive experience in the energy and solar sector.
-                      Proven ability to lead cross-functional teams, manage budgets, and deliver
-                      complex technical projects on time.
+                      {about.summary[0]}
                     </p>
                     <p className="text-slate-600 leading-relaxed text-base">
-                      Combining a strong technical background in <strong className="text-slate-800">solar
-                      power systems and electrical engineering</strong> with solid project management
-                      skills. Experienced in coordinating between technical teams and management,
-                      preparing detailed reports, and ensuring smooth project execution.
+                      {about.summary[1]}
                     </p>
                   </div>
                 </div>
@@ -96,7 +89,10 @@ export default function About() {
 
             {/* Key Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {highlights.map((item, i) => (
+              {about.highlights.map((item, i) => {
+                const Icon = highlightIcons[i];
+
+                return (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 30, rotateX: 20 }}
@@ -107,14 +103,15 @@ export default function About() {
                   <TiltCard tiltAmount={12}>
                     <div className="bg-white rounded-xl p-5 text-center border border-slate-100 shadow-sm hover:shadow-md hover:border-amber-200 transition-all">
                       <div className="w-10 h-10 mx-auto rounded-lg bg-amber-50 flex items-center justify-center mb-3">
-                        <item.icon size={20} className="text-amber-600" />
+                        <Icon size={20} className="text-amber-600" />
                       </div>
                       <p className="text-slate-900 font-bold text-sm">{item.value}</p>
                       <p className="text-slate-500 text-xs mt-1">{item.label}</p>
                     </div>
                   </TiltCard>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -130,17 +127,13 @@ export default function About() {
               <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 text-white shadow-xl">
                 <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
                   <Award size={20} className="text-amber-400" />
-                  Key Strengths
+                  {about.strengthsTitle}
                 </h3>
                 <ul className="space-y-4">
-                  {[
-                    { icon: Target, text: 'Strategic Project Planning' },
-                    { icon: FileText, text: 'Technical Documentation' },
-                    { icon: Wrench, text: 'Solar & Electrical Systems' },
-                    { icon: Users, text: 'Team Coordination & Leadership' },
-                    { icon: TrendingUp, text: 'Budget Control & Reporting' },
-                    { icon: Zap, text: 'Renewable Energy Expertise' },
-                  ].map((item, i) => (
+                  {about.strengths.map((item, i) => {
+                    const Icon = strengthIcons[i];
+
+                    return (
                     <motion.li
                       key={i}
                       className="flex items-center gap-3"
@@ -149,30 +142,33 @@ export default function About() {
                       transition={{ delay: 0.5 + i * 0.1 }}
                     >
                       <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
-                        <item.icon size={16} className="text-amber-400" />
+                        <Icon size={16} className="text-amber-400" />
                       </div>
-                      <span className="text-slate-200 text-sm">{item.text}</span>
+                      <span className="text-slate-200 text-sm">{item}</span>
                     </motion.li>
-                  ))}
+                    );
+                  })}
                 </ul>
 
                 <div className="mt-8 pt-6 border-t border-white/10">
                   <h4 className="text-sm font-semibold text-amber-400 mb-3 uppercase tracking-wider">
-                    Languages
+                    {about.languagesTitle}
                   </h4>
                   <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-slate-300">Arabic</span>
-                      <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">
-                        Native
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-slate-300">English</span>
-                      <span className="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">
-                        Fluent
-                      </span>
-                    </div>
+                    {about.languages.map((item, index) => (
+                      <div key={item.name} className="flex justify-between items-center gap-3">
+                        <span className="text-sm text-slate-300">{item.name}</span>
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded-full ${
+                            index === 0
+                              ? 'bg-green-500/20 text-green-400'
+                              : 'bg-amber-500/20 text-amber-400'
+                          }`}
+                        >
+                          {item.level}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

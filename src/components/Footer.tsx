@@ -1,6 +1,9 @@
 import { Heart } from 'lucide-react';
+import usePortfolioLanguage from './usePortfolioLanguage';
 
 export default function Footer() {
+  const { content } = usePortfolioLanguage();
+
   return (
     <footer className="bg-slate-950 py-8 border-t border-white/5">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -9,18 +12,18 @@ export default function Footer() {
             <div className="w-6 h-6 rounded-md bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-slate-900 font-black text-xs">
               AR
             </div>
-            <span className="text-sm font-medium">Ahmad Rahmeh</span>
+            <span className="text-sm font-medium">{content.brand.name}</span>
           </div>
 
           <p className="text-slate-500 text-sm flex items-center gap-1">
-            © {new Date().getFullYear()} Built with <Heart size={12} className="text-red-500 fill-red-500" /> | Amman, Jordan
+            © {new Date().getFullYear()} {content.footer.builtWith} <Heart size={12} className="text-red-500 fill-red-500" /> | {content.footer.location}
           </p>
 
           <a
             href="#home"
             className="text-slate-400 text-sm hover:text-amber-400 transition-colors"
           >
-            Back to top ↑
+            {content.footer.backToTop} ↑
           </a>
         </div>
       </div>
