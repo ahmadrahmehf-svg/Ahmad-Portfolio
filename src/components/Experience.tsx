@@ -11,6 +11,7 @@ import {
   Users,
   DollarSign,
   MessageSquare,
+  Lightbulb,
 } from 'lucide-react';
 import TiltCard from './TiltCard';
 
@@ -44,6 +45,22 @@ export default function Experience() {
         { icon: Users, text: 'Collaborated with engineers, project teams, and stakeholders during design phases' },
         { icon: MessageSquare, text: 'Coordinated revisions and technical feedback to improve project deliverables' },
         { icon: DollarSign, text: 'Assisted with quantity estimation and design-related cost considerations' },
+      ],
+    },
+    {
+      title: 'PV Solar Technician',
+      company: 'New Village of Energy (NVEco)',
+      location: 'Amman, Jordan',
+      period: 'October 2017 – October 2018',
+      color: 'from-emerald-500 to-cyan-500',
+      icon: Lightbulb,
+      responsibilities: [
+        { icon: Lightbulb, text: 'Worked on PV solar energy systems and renewable energy projects' },
+        { icon: Settings, text: 'Provided installation support, field supervision, and technical assistance' },
+        { icon: FileText, text: 'Assisted with solar panel system setup, testing, and commissioning' },
+        { icon: ClipboardList, text: 'Performed troubleshooting, inspections, and preventive maintenance tasks' },
+        { icon: Users, text: 'Coordinated with site teams to ensure safe and efficient execution of work' },
+        { icon: MessageSquare, text: 'Prepared technical notes and reported field progress to supervisors' },
       ],
     },
     {

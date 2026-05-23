@@ -192,8 +192,8 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.9 }}
         >
           {[
-            { icon: Phone, text: '+962 7X XXX XXXX', href: 'tel:+962700000000' },
-            { icon: Mail, text: 'ahmad.rahmeh@email.com', href: 'mailto:ahmad.rahmeh@email.com' },
+            { icon: Phone, text: '+962797536891', href: 'tel:+962797536891' },
+            { icon: Mail, text: 'ahmedrahmeh@yahoo.com', href: 'mailto:ahmedrahmeh@yahoo.com' },
             { icon: MapPin, text: 'Amman, Jordan', href: '#' },
           ].map((item, i) => (
             <motion.a
