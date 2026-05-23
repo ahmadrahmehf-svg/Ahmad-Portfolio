@@ -14,6 +14,7 @@ export default function Hero() {
   const [visible, setVisible] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState('');
   const { content, isArabic, language } = usePortfolioLanguage();
   const hero = content.hero;
 
@@ -38,7 +39,15 @@ export default function Hero() {
 
     try {
       setIsDownloading(true);
+      setDownloadError('');
       await downloadPortfolioPdf(language === 'ar' ? 'ahmad-rahmeh-portfolio-ar.pdf' : 'ahmad-rahmeh-portfolio-en.pdf');
+    } catch (error) {
+      console.error(error);
+      setDownloadError(
+        language === 'ar'
+          ? 'تعذر إنشاء ملف PDF. حاول مرة أخرى.'
+          : 'Failed to generate the PDF. Please try again.'
+      );
     } finally {
       setIsDownloading(false);
     }
@@ -269,6 +278,11 @@ export default function Hero() {
             {isDownloading ? hero.downloadingCta : hero.downloadCta}
           </motion.button>
         </motion.div>
+        {downloadError && (
+          <p className="mt-4 text-sm text-rose-300">
+            {downloadError}
+          </p>
+        )}
 
         {/* Scroll indicator */}
         <motion.div
